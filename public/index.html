@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Keycloak Protected Page</title>
+    <script src="https://cdn.jsdelivr.net/npm/keycloak-js@23.0.6/dist/keycloak.min.js"></script>
+  </head>
+  <body>
+    <h1 id="loading">Loading...</h1>
+
+    <div id="app" style="display: none;">
+      <h2>Welcome to the App!</h2>
+      <button onclick="goToGoogle()">Go to Google</button>
+      <button onclick="logout()">Logout</button>
+    </div>
+
+    <script>
+      const keycloak = new Keycloak({
+        url: 'http://localhost:8080',
+        realm: 'myrealm',
+        clientId: 'my-client'
+      });
+
+      keycloak.init({ onLoad: 'login-required' }).then(authenticated => {
+        if (authenticated) {
+          document.getElementById('loading').style.display = 'none';
+          document.getElementById('app').style.display = 'block';
+        } else {
+          keycloak.login();
+        }
+      }).catch(() => {
+        document.getElementById('loading').innerText = 'Authentication Failed';
+      });
+
+      function goToGoogle() {
+        window.location.href = 'https://www.google.com';
+      }
+
+      function logout() {
+        keycloak.logout({
+          redirectUri: window.location.origin
+        });
+      }
+    </script>
+  </body>
+</html>
