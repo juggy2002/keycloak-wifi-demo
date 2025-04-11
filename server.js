@@ -8,6 +8,7 @@ app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'public/index.html'));
 });
 
-app.listen(3000, () => {
-  console.log('App running on http://localhost:3000');
-});
+app.listen(port, '0.0.0.0', () => {
+    console.log(`Server running at http://0.0.0.0:${3000}`);
+  });
+  ;
